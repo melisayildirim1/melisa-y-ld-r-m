@@ -1,140 +1,173 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Re/Max Gündem - İtiraz Avcısı Oyunu</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/6/6d/REMAXBalloon.png');
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: 150px;
-    margin: 0;
-    padding: 0;
-  }
-
-  header {
-    background-color: #0056b3;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-  }
-
-  .card {
-    background: white;
-    border: 3px solid #ff0000;
-    border-radius: 10px;
-    margin: 40px auto;
-    padding: 30px;
-    width: 90%;
-    max-width: 500px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
-
-  button {
-    margin: 10px;
-    padding: 12px 20px;
-    border-radius: 8px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-
-  button:hover {
-    background-color: #ff0000;
-  }
-
-  footer {
-    background-color: #0056b3;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    font-size: 14px;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    margin-top: 50px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <title>Re/Max Gündem - İtiraz Karşılama Oyunu</title>
+    <style>
+        body {
+            background: linear-gradient(white, #d1e0ff);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            color: #003366;
+        }
+        h1 {
+            color: #d40000;
+        }
+        .question-container {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px solid #003366;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .option {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 60%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .option:hover {
+            background-color: #0056b3;
+        }
+        .option.correct {
+            background-color: #28a745;
+        }
+        .option.wrong {
+            background-color: #dc3545;
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 14px;
+            color: #003366;
+        }
+        .footer strong {
+            color: #d40000;
+        }
+        img.logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  🏡 Re/Max Gündem İtiraz Avcısı
-</header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/REMAX_Balloon.svg/1200px-REMAX_Balloon.svg.png" alt="Re/Max Logo" class="logo">
 
-<div class="card">
-  <h2 id="soru">Yükleniyor...</h2>
-  <div id="cevaplar"></div>
-  <p id="sonuc"></p>
-</div>
+    <h1>Re/Max Gündem İtiraz Karşılama Oyunu</h1>
 
-<footer>
-  Re/Max Gündem<br>
-  📞 0232 361 33 33<br>
-  📍 30 Ağustos Mah. 7202 Sokak No:11 Menemen / İzmir<br>
-  📍 Bostanlı Mahallesi Cemal Gürsel Caddesi No:109 D:1 Karşıyaka / İzmir
-</footer>
+    <div id="game" class="question-container">
+        <h2 id="question">Yükleniyor...</h2>
+        <div id="options"></div>
+    </div>
 
-<script>
-const itirazlar = [
-  { soru: "Komisyon oranı neden bu kadar yüksek?", cevaplar: { A: "Verdiğimiz profesyonel hizmetle doğru orantılı.", B: "Pazarlık yapılabilir.", C: "Diğerleri daha pahalı." }, dogru: "A" },
-  { soru: "Evi kendim de satabilirim.", cevaplar: { A: "Tabii ki, ancak bizimle daha hızlı ve güvenli olur.", B: "Sizin şansınıza kalmış.", C: "Zor olur satamazsınız." }, dogru: "A" },
-  { soru: "Fiyat çok yüksek geldi.", cevaplar: { A: "Piyasa analizine göre bu fiyat oldukça rekabetçi.", B: "O zaman başka bir ev bakalım.", C: "Siz anlamıyorsunuz." }, dogru: "A" },
-  { soru: "Şu anda karar veremem.", cevaplar: { A: "Sizi anlıyorum, karar sürecinizde destek olabilirim.", B: "Ne zaman karar vereceksiniz?", C: "Bu fırsat kaçarsa üzülürsünüz." }, dogru: "A" },
-  { soru: "Başka bir emlakçı daha düşük komisyon istedi.", cevaplar: { A: "Hizmet kalitemiz düşük komisyonlardan daha değerlidir.", B: "O zaman onlarla çalışın.", C: "Bize güvenin." }, dogru: "A" },
-  { soru: "İlanda gördüğüm başka bir ev daha var.", cevaplar: { A: "İsterseniz ikisini birlikte değerlendirelim.", B: "Bizim ev daha iyi.", C: "O ev zaten satılmıştır." }, dogru: "A" },
-  { soru: "Çok fazla emlakçı arıyor, rahatsız oldum.", cevaplar: { A: "Sizi anlayışla karşılıyorum ve rahatsızlık vermemek için dikkatliyiz.", B: "Bu normal.", C: "Herkes arar." }, dogru: "A" },
-  { soru: "Bu ev değerini bulmaz.", cevaplar: { A: "Güncel ekspertiz raporları ile destekliyoruz.", B: "Zaman gösterecek.", C: "Bulursa bulur." }, dogru: "A" },
-  { soru: "Kredi sürecinden korkuyorum.", cevaplar: { A: "Bu süreci kolaylaştırmak için size destek oluyoruz.", B: "Şansınızı deneyin.", C: "Zaten herkes korkuyor." }, dogru: "A" },
-  { soru: "Evin konumu bana uymuyor.", cevaplar: { A: "Sizin için alternatif lokasyonlar da sunabiliriz.", B: "Alışınca seversiniz.", C: "Başka bir zaman görüşelim." }, dogru: "A" }
-];
+    <div class="footer">
+        <p><strong>Re/Max Gündem</strong> | İletişim: 0232 361 33 33</p>
+        <p>30 Ağustos Mah. 7202 Sokak No:11 Menemen / İzmir</p>
+        <p>Bostanlı Mahallesi Cemal Gürsel Caddesi No:109 D:1 Karşıyaka / İzmir</p>
+    </div>
 
-let puan = 0;
-let index = 0;
+    <script>
+        const questions = [
+            {
+                question: "Bu ev neden bu kadar pahalı?",
+                options: ["Bölgedeki emsal fiyatlarla uyumlu.", "Bilmiyorum.", "Pazarlık yapabiliriz.", "İstersen başka eve bakalım."]
+            },
+            {
+                question: "Başka bir emlakçı daha düşük fiyat verdi.",
+                options: ["Detayları inceleyelim, farkın sebebini bulabiliriz.", "Ben daha ucuz veririm.", "Onlarla çalışın o zaman.", "İyi şanslar dilerim."]
+            },
+            {
+                question: "Komisyon çok yüksek.",
+                options: ["Sunduğumuz hizmet ve uzmanlık bu ücreti haklı kılıyor.", "Pazarlık yaparız.", "Ben de çok buluyorum.", "O zaman anlaşmayalım."]
+            },
+            {
+                question: "Kredi çıkmazsa ne olacak?",
+                options: ["Ön onay sürecini birlikte yönetiriz.", "Şansınıza küssün.", "Ben karışmam.", "Başka alıcı buluruz."]
+            },
+            {
+                question: "Bu evi almak için acele etmeli miyim?",
+                options: ["Talep yüksek, kaçırma riskini konuşalım.", "Bilmiyorum.", "Sen bilirsin.", "Boşver, düşün."]
+            },
+            {
+                question: "Deprem dayanıklılığına güvenebilir miyim?",
+                options: ["Raporları ve belgeleri gösterebilirim.", "Bence dayanıklı.", "Bilmiyorum.", "Salla gitsin."]
+            },
+            {
+                question: "Neden başka bir bölgede ev bakmıyoruz?",
+                options: ["İsteklerinize uygun en iyi alternatif burası.", "Çünkü burada komisyon alıyorum.", "Burası bana yakın.", "Öylesine gösterdim."]
+            },
+            {
+                question: "Ev sahibi pazarlığa açık mı?",
+                options: ["Görüşme yapabiliriz, teklifinizi sunarım.", "Kesinlikle değil.", "Bilmiyorum.", "Ev sahibini tanımam."]
+            },
+            {
+                question: "Bu bölgede değer artışı olur mu?",
+                options: ["Gelişim projeleri ve yatırım planlarını gösterebilirim.", "Kimse bilemez.", "Şansınıza.", "İstersen başka yere bakalım."]
+            },
+            {
+                question: "Tapu işlemleri ne kadar sürer?",
+                options: ["Tüm belgeler tam ise süreç 3-5 gün içinde tamamlanır.", "Bilmiyorum.", "İsterse uzar.", "Tapu işi şans işi."]
+            }
+        ];
 
-function goster() {
-  const soru = itirazlar[index];
-  document.getElementById('soru').innerText = soru.soru;
-  let cevapHTML = "";
-  for (const secenek in soru.cevaplar) {
-    cevapHTML += `<button onclick="cevapVer('${secenek}')">${secenek}) ${soru.cevaplar[secenek]}</button><br>`;
-  }
-  document.getElementById('cevaplar').innerHTML = cevapHTML;
-}
+        let currentQuestion = 0;
 
-function cevapVer(secilen) {
-  if (secilen === itirazlar[index].dogru) {
-    puan += 3;
-    document.getElementById('sonuc').innerText = "⭐️ Doğru cevap!";
-  } else {
-    puan += 1;
-    document.getElementById('sonuc').innerText = "⭐️ Yanlış cevap.";
-  }
-  index++;
-  if (index < itirazlar.length) {
-    setTimeout(() => {
-      document.getElementById('sonuc').innerText = "";
-      goster();
-    }, 1000);
-  } else {
-    setTimeout(() => {
-      document.getElementById('soru').innerText = `Oyun Bitti! Toplam Puan: ${puan}`;
-      document.getElementById('cevaplar').innerHTML = "";
-    }, 1000);
-  }
-}
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
 
-goster();
-</script>
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('question').innerText = q.question;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = "";
+
+            let shuffledOptions = [...q.options];
+            shuffle(shuffledOptions);
+
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.innerText = option;
+                button.className = "option";
+                button.onclick = () => checkAnswer(option, q.options[0]);
+                optionsDiv.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selected, correct) {
+            const buttons = document.querySelectorAll('.option');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.innerText === correct) {
+                    btn.classList.add('correct');
+                }
+                if (btn.innerText === selected && selected !== correct) {
+                    btn.classList.add('wrong');
+                }
+            });
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    document.getElementById('game').innerHTML = "<h2>Tebrikler! Tüm itirazları başarıyla karşıladınız! 🎉</h2>";
+                }
+            }, 1500);
+        }
+
+        showQuestion();
+    </script>
 
 </body>
 </html>
