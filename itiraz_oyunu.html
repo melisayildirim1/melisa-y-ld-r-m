@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Re/Max Gündem - İtiraz Avcısı Oyunu</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/6/6d/REMAXBalloon.png');
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: 150px;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    background-color: #0056b3;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .card {
+    background: white;
+    border: 3px solid #ff0000;
+    border-radius: 10px;
+    margin: 40px auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  button {
+    margin: 10px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+
+  button:hover {
+    background-color: #ff0000;
+  }
+
+  footer {
+    background-color: #0056b3;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 50px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  🏡 Re/Max Gündem İtiraz Avcısı
+</header>
+
+<div class="card">
+  <h2 id="soru">Yükleniyor...</h2>
+  <div id="cevaplar"></div>
+  <p id="sonuc"></p>
+</div>
+
+<footer>
+  Re/Max Gündem<br>
+  📞 0232 361 33 33<br>
+  📍 30 Ağustos Mah. 7202 Sokak No:11 Menemen / İzmir<br>
+  📍 Bostanlı Mahallesi Cemal Gürsel Caddesi No:109 D:1 Karşıyaka / İzmir
+</footer>
+
+<script>
+const itirazlar = [
+  { soru: "Komisyon oranı neden bu kadar yüksek?", cevaplar: { A: "Verdiğimiz profesyonel hizmetle doğru orantılı.", B: "Pazarlık yapılabilir.", C: "Diğerleri daha pahalı." }, dogru: "A" },
+  { soru: "Evi kendim de satabilirim.", cevaplar: { A: "Tabii ki, ancak bizimle daha hızlı ve güvenli olur.", B: "Sizin şansınıza kalmış.", C: "Zor olur satamazsınız." }, dogru: "A" },
+  { soru: "Fiyat çok yüksek geldi.", cevaplar: { A: "Piyasa analizine göre bu fiyat oldukça rekabetçi.", B: "O zaman başka bir ev bakalım.", C: "Siz anlamıyorsunuz." }, dogru: "A" },
+  { soru: "Şu anda karar veremem.", cevaplar: { A: "Sizi anlıyorum, karar sürecinizde destek olabilirim.", B: "Ne zaman karar vereceksiniz?", C: "Bu fırsat kaçarsa üzülürsünüz." }, dogru: "A" },
+  { soru: "Başka bir emlakçı daha düşük komisyon istedi.", cevaplar: { A: "Hizmet kalitemiz düşük komisyonlardan daha değerlidir.", B: "O zaman onlarla çalışın.", C: "Bize güvenin." }, dogru: "A" },
+  { soru: "İlanda gördüğüm başka bir ev daha var.", cevaplar: { A: "İsterseniz ikisini birlikte değerlendirelim.", B: "Bizim ev daha iyi.", C: "O ev zaten satılmıştır." }, dogru: "A" },
+  { soru: "Çok fazla emlakçı arıyor, rahatsız oldum.", cevaplar: { A: "Sizi anlayışla karşılıyorum ve rahatsızlık vermemek için dikkatliyiz.", B: "Bu normal.", C: "Herkes arar." }, dogru: "A" },
+  { soru: "Bu ev değerini bulmaz.", cevaplar: { A: "Güncel ekspertiz raporları ile destekliyoruz.", B: "Zaman gösterecek.", C: "Bulursa bulur." }, dogru: "A" },
+  { soru: "Kredi sürecinden korkuyorum.", cevaplar: { A: "Bu süreci kolaylaştırmak için size destek oluyoruz.", B: "Şansınızı deneyin.", C: "Zaten herkes korkuyor." }, dogru: "A" },
+  { soru: "Evin konumu bana uymuyor.", cevaplar: { A: "Sizin için alternatif lokasyonlar da sunabiliriz.", B: "Alışınca seversiniz.", C: "Başka bir zaman görüşelim." }, dogru: "A" }
+];
+
+let puan = 0;
+let index = 0;
+
+function goster() {
+  const soru = itirazlar[index];
+  document.getElementById('soru').innerText = soru.soru;
+  let cevapHTML = "";
+  for (const secenek in soru.cevaplar) {
+    cevapHTML += `<button onclick="cevapVer('${secenek}')">${secenek}) ${soru.cevaplar[secenek]}</button><br>`;
+  }
+  document.getElementById('cevaplar').innerHTML = cevapHTML;
+}
+
+function cevapVer(secilen) {
+  if (secilen === itirazlar[index].dogru) {
+    puan += 3;
+    document.getElementById('sonuc').innerText = "⭐️ Doğru cevap!";
+  } else {
+    puan += 1;
+    document.getElementById('sonuc').innerText = "⭐️ Yanlış cevap.";
+  }
+  index++;
+  if (index < itirazlar.length) {
+    setTimeout(() => {
+      document.getElementById('sonuc').innerText = "";
+      goster();
+    }, 1000);
+  } else {
+    setTimeout(() => {
+      document.getElementById('soru').innerText = `Oyun Bitti! Toplam Puan: ${puan}`;
+      document.getElementById('cevaplar').innerHTML = "";
+    }, 1000);
+  }
+}
+
+goster();
+</script>
+
+</body>
+</html>
